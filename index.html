@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>MOLECULAR ARENA — ساحة الجزيئات</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(circle at 50% 0,#12234a,#070d1e);font-family:Tahoma,"Segoe UI",system-ui,Arial,sans-serif;color:#fff;touch-action:none;user-select:none;-webkit-user-select:none}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,18,40,.8);z-index:6;padding:12px;overflow:auto;touch-action:pan-y}
+.hide{display:none!important}
+.card{background:rgba(14,24,48,.93);border:1px solid #4de1ff;box-shadow:0 0 30px rgba(77,225,255,.25);font-size:16px;border-radius:20px;padding:16px 20px;max-width:620px;width:100%;text-align:center;margin:auto}
+h1{font-size:clamp(20px,4vw,30px);margin:4px 0}h3{margin:10px 0 4px}
+input,select,button{font:inherit;border-radius:12px;border:0;padding:10px 12px;min-height:44px}
+input,select{background:#fff;color:#102040;width:100%;text-align:center}
+button:focus,select:focus,input:focus{outline:3px solid #ffe600}
+button{background:linear-gradient(#4de1ff,#2aa8e0);color:#021626;font-weight:700;cursor:pointer}
+.row{display:flex;gap:10px;margin:8px 0}.row>*{flex:1}
+.help{font-size:12.5px;line-height:1.7;text-align:right;background:#12203d;border-radius:12px;padding:8px 12px}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:3px 6px;border-bottom:1px solid #35508f}
+#top{position:fixed;top:4px;left:50%;transform:translateX(-50%);z-index:3;text-align:center;pointer-events:none;background:rgba(10,18,40,.78);border-radius:14px;padding:4px 16px;min-width:150px}
+#fm{font-size:clamp(22px,3.4vw,36px);font-weight:700;letter-spacing:2px;direction:ltr}#fm sub{font-size:.6em}
+#rd,#nm,#tm{font-size:13px}
+.pl{position:fixed;top:4px;z-index:3;background:rgba(10,18,40,.72);border-radius:12px;padding:5px 11px;font-size:clamp(11px,1.6vw,15px);pointer-events:none;max-width:28vw}
+#mid{position:fixed;top:0;bottom:0;left:50%;width:3px;margin-left:-1.5px;background:#fff;opacity:.65;z-index:2;pointer-events:none}
+#cd{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font-size:22vmin;font-weight:700;z-index:4;pointer-events:none;opacity:0;text-shadow:0 4px 20px #000}
+#sig{position:fixed;bottom:4px;left:50%;transform:translateX(-50%);z-index:9;font-size:13px;background:rgba(10,18,40,.85);padding:3px 14px;border-radius:12px;pointer-events:none;white-space:nowrap}
+.sb{position:fixed;bottom:4px;z-index:9;min-height:32px;padding:4px 10px;font-size:12px}
+#cap{position:fixed;top:10%;left:0;right:0;text-align:center;font-size:clamp(22px,4vw,40px);font-weight:700;z-index:4;pointer-events:none;text-shadow:0 3px 10px #000}.cs #mid,.cs .pl,.cs #top{display:none}
+#ht{position:fixed;top:120px;left:50%;transform:translateX(-50%);z-index:4;background:rgba(10,18,40,.92);border:2px solid #4de1ff;border-radius:14px;padding:6px 16px;text-align:center;pointer-events:none}.solo #mid,.solo #h1,.solo #hb1{display:none}.bar{height:10px;background:#12203d;border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,#4de1ff,#7dffb0)}
+pre{direction:ltr;display:inline-block;font-size:22px;line-height:1.15;margin:6px;text-align:left;font-family:Consolas,monospace}
+</style></head><body>
+<canvas id="c"></canvas>
+<div id="top"><div id="rd"></div><div id="fm"></div><div id="nm"></div><div id="tm"></div></div>
+<div class="pl" id="h0" style="left:6px"></div><div class="pl" id="h1" style="right:6px"></div>
+<div id="mid"></div><div id="cap"></div><div id="ht" class="hide"></div><div id="cd"></div>
+<button class="sb" id="qb" style="left:6px"></button><button class="sb" id="mb" style="right:6px">القائمة</button><button class="sb" id="hb0" style="left:150px">💡 تلميح 1</button><button class="sb" id="hb1" style="right:80px">💡 تلميح 2</button>
+<div id="sig">إعداد: أستاذ / سلمان سليم</div>
+<div id="msg" class="ov hide"><div class="card" id="mt"></div></div>
+<div id="menu" class="ov"><div class="card">
+<h1><span style="color:#4de1ff;letter-spacing:2px">MOLECULAR ARENA</span><br>ساحة الجزيئات</h1>
+<div>أشكال الجزيئات • صيغة لويس • الصيغة البنائية — الصف الثاني الثانوي</div>
+<div class="row"><select id="md"><option value="d">⚔ مواجهة لاعبين</option><option value="s">🧪 التحدي الفردي</option><option value="p">📘 التدريب الحر</option></select><select id="df"><option value="1">سهل (≤3 ذرات)</option><option value="2" selected>متوسط (≤5)</option><option value="3">صعب (الكل)</option></select></div>
+<div class="row"><input id="n0" maxlength="14" placeholder="اسم اللاعب 1 (الأحمر)"><input id="n1" maxlength="14" placeholder="اسم اللاعب 2 (البرتقالي)"></div>
+<div class="row"><select id="pm"></select><select id="rn"><option value="3">3 مراحل</option><option value="5" selected>5 مراحل</option><option value="8">8 مراحل</option></select><select id="tl"><option value="60">⏱ 60 ث</option><option value="90">⏱ 90 ث</option><option value="120" selected>⏱ 120 ث</option><option value="180">⏱ 180 ث</option><option value="0">بلا وقت</option></select></div>
+<div class="row"><button id="ms">🎵 الموسيقى</button><input id="vl" type="range" min="0" max="100" value="60" style="padding:0"></div>
+<div class="row"><button id="sd">🔊 المؤثرات</button><button id="sw">🎮 تبديل ✕/○</button></div><div class="row"><button id="sp">🔁 تبديل ذراعي اللاعبين</button></div><div class="row"><button id="go">ابدأ</button></div>
+<div class="help"><b>طريقة اللعب:</b> اسحب الكرات (الذرات) إلى منطقة البناء، ثم أفلت العصا (الرابطة) بين ذرتين. عصا ثانية على نفس الذرتين = رابطة ثنائية. النقاط الصفراء = إلكترونات التكافؤ: ضعها حول الذرة لتعويض الإلكترونات غير المشاركة (شرط للفوز: وزّعها حول كل ذرة بعدد إلكتروناتها غير المشاركة، مثل الأكسجين في الماء 4، والهيدروجين 0). اسحب الخلفية لتدوير المجسم، وأعد القطعة إلى الصندوق السفلي لإزالتها.<br>
+<b>الفأرة / اللمس:</b> كل لاعب يلعب في نصفه من الشاشة.<br>
+<b>لاعب 1:</b> W A S D حركة • Space إمساك/إفلات • Q/E تدوير • Z مسح • H تلميح (-20)<br>
+<b>لاعب 2:</b> الأسهم • Enter إمساك/إفلات • , . تدوير • / مسح • N تلميح (-20)<br>
+<b>ذراع PlayStation:</b> العصا اليسرى حركة • ✕ إمساك/إفلات • ○ مسح • △ تلميح • (أول ذراع تضغط زرًا فيه = لاعب 1 والثاني = لاعب 2) • العصا اليمنى تدوير (اضغط أي زر في ذراع اللاعب 1 أولًا ثم ذراع اللاعب 2؛ وإن انعكس الترتيب استخدم زر تبديل ذراعي اللاعبين)</div>
+<div class="row"><div id="gs" class="help" style="flex:2"></div><button id="rp">🎮 إعادة تعيين الأذرع</button></div><div id="lb"></div>
+</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+const $=i=>document.getElementById(i),cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+if(typeof THREE==='undefined'){$('lb').innerHTML='<b>تعذّر تحميل مكتبة three.js — تحقق من الاتصال بالإنترنت.</b>';$('go').disabled=true;return}
+const ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}};
+const jl=()=>{try{return JSON.parse(ls('mlb')||'{}')}catch(e){return {}}};
+const esc=s=>s.replace(/[&<>"]/g,c=>'&#'+c.charCodeAt(0)+';');
+const COMP=[
+{f:'HCl',n:'كلوريد الهيدروجين',a:['H','Cl'],b:[[0,1,1]],s:'H–Cl'},
+{f:'O<sub>2</sub>',n:'الأكسجين',a:['O','O'],b:[[0,1,2]],s:'O=O'},
+{f:'N<sub>2</sub>',n:'النيتروجين',a:['N','N'],b:[[0,1,3]],s:'N≡N'},
+{f:'H<sub>2</sub>O',n:'الماء',a:['O','H','H'],b:[[0,1,1],[0,2,1]],s:'H–O–H'},
+{f:'CO<sub>2</sub>',n:'ثاني أكسيد الكربون',a:['C','O','O'],b:[[0,1,2],[0,2,2]],s:'O=C=O'},
+{f:'H<sub>2</sub>S',n:'كبريتيد الهيدروجين',a:['S','H','H'],b:[[0,1,1],[0,2,1]],s:'H–S–H'},
+{f:'HCN',n:'سيانيد الهيدروجين',a:['H','C','N'],b:[[0,1,1],[1,2,3]],s:'H–C≡N'},
+{f:'NH<sub>3</sub>',n:'الأمونيا',a:['N','H','H','H'],b:[[0,1,1],[0,2,1],[0,3,1]],s:'H–N–H\n   |\n   H'},
+{f:'CH<sub>4</sub>',n:'الميثان',a:['C','H','H','H','H'],b:[[0,1,1],[0,2,1],[0,3,1],[0,4,1]],s:'   H\n   |\nH–C–H\n   |\n   H'},
+{f:'C<sub>2</sub>H<sub>4</sub>',n:'الإيثين',a:['C','C','H','H','H','H'],b:[[0,1,2],[0,2,1],[0,3,1],[1,4,1],[1,5,1]],s:'H   H\n \\ /\n C=C\n / \\\nH   H'},
+{f:'CH<sub>3</sub>OH',n:'الميثانول',a:['C','O','H','H','H','H'],b:[[0,1,1],[0,2,1],[0,3,1],[0,4,1],[1,5,1]],s:' H\n |\nH–C–O–H\n |\n H'},
+{f:'HF',n:'فلوريد الهيدروجين',a:['H','F'],b:[[0,1,1]],s:'H–F'},
+{f:'H<sub>2</sub>O<sub>2</sub>',n:'فوق أكسيد الهيدروجين',a:['O','O','H','H'],b:[[0,1,1],[0,2,1],[1,3,1]],s:'H–O–O–H'},
+{f:'C<sub>2</sub>H<sub>2</sub>',n:'الإيثاين (الأسيتيلين)',a:['C','C','H','H'],b:[[0,1,3],[0,2,1],[1,3,1]],s:'H–C≡C–H'},
+{f:'CH<sub>2</sub>O',n:'الميثانال (الفورمالديهايد)',a:['C','O','H','H'],b:[[0,1,2],[0,2,1],[0,3,1]],s:'  O\n  ||\nH–C–H'},
+{f:'CH<sub>3</sub>Cl',n:'كلورو ميثان',a:['C','Cl','H','H','H'],b:[[0,1,1],[0,2,1],[0,3,1],[0,4,1]],s:' H\n |\nH–C–Cl\n |\n H'},
+{f:'BF<sub>3</sub>',n:'ثلاثي فلوريد البورون',a:['B','F','F','F'],b:[[0,1,1],[0,2,1],[0,3,1]],s:'  F\n  |\nF–B–F'},
+{f:'CCl<sub>4</sub>',n:'رباعي كلوريد الكربون',a:['C','Cl','Cl','Cl','Cl'],b:[[0,1,1],[0,2,1],[0,3,1],[0,4,1]],s:'  Cl\n   |\nCl–C–Cl\n   |\n  Cl'}];
+const SH={HCl:['خطي','خطي','—','جزيء ثنائي الذرة فلا توجد زاوية.'],HF:['خطي','خطي','—','جزيء ثنائي الذرة فلا توجد زاوية.'],O2:['خطي','خطي','—','جزيء ثنائي الذرة فلا توجد زاوية.'],N2:['خطي','خطي','—','جزيء ثنائي الذرة فلا توجد زاوية.'],
+H2O:['رباعي السطوح','منحني','104.5°','زوجان حران على O يضغطان الرابطتين فتضيق الزاوية عن 109.5°.'],CO2:['خطي','خطي','180°','لا أزواج حرة على C، ومنطقتان إلكترونيتان متقابلتان.'],H2S:['رباعي السطوح','منحني','≈92°','زوجان حران على S فالشكل منحني.'],HCN:['خطي','خطي','180°','منطقتان إلكترونيتان حول C (رابطة أحادية وأخرى ثلاثية).'],
+NH3:['رباعي السطوح','مثلثي هرمي','107°','زوج حر واحد على N يضغط الروابط الثلاث.'],CH4:['رباعي السطوح','رباعي السطوح','109.5°','أربعة أزواج رابطة ولا أزواج حرة.'],C2H4:['مثلثي مستوٍ','مثلثي مستوٍ','≈120°','حول كل ذرة C ثلاث مناطق إلكترونية (الرابطة الثنائية تُعدّ منطقة واحدة).'],
+CH3OH:['رباعي السطوح','رباعي السطوح','≈109.5°','هذا الشكل حول ذرة C؛ أما حول O فالشكل منحني.'],H2O2:['رباعي السطوح','منحني','≈95–100°','حول كل ذرة O زوجان حران فالشكل حولها منحني.'],C2H2:['خطي','خطي','180°','حول كل C منطقتان إلكترونيتان (رابطة ثلاثية ورابطة أحادية).'],
+CH2O:['مثلثي مستوٍ','مثلثي مستوٍ','≈120°','ثلاث مناطق إلكترونية حول C ولا أزواج حرة عليه.'],CH3Cl:['رباعي السطوح','رباعي السطوح','≈109.5°','أربعة أزواج رابطة حول C ولا أزواج حرة.'],
+BF3:['مثلثي مستوٍ','مثلثي مستوٍ','120°','ثلاثة أزواج رابطة حول B ولا أزواج حرة؛ B استثناء من قاعدة الثمانية (6 إلكترونات).'],CCl4:['رباعي السطوح','رباعي السطوح','109.5°','أربعة أزواج رابطة حول C ولا أزواج حرة.']};
+const SL=['خطي','منحني','مثلثي مستوٍ','مثلثي هرمي','رباعي السطوح'];
+const EL={H:[0xffffff,.45,'#223'],C:[0x3a3f4b,.65,'#fff'],N:[0x3b6cf0,.62,'#fff'],O:[0xe8343a,.62,'#fff'],S:[0xf2d230,.75,'#223'],Cl:[0x2fbf5a,.72,'#fff'],F:[0x7fe8d8,.5,'#223'],B:[0xffa97a,.6,'#223']};const VE={H:1,C:4,N:5,O:6,S:6,Cl:7,F:7,B:3};
+const QL=[['أعلى دقة',3,1],['عالية',2,1],['متوسطة',1,0]];let qi=+(ls('mq2')||0);
+const KM=[{l:'KeyA',r:'KeyD',u:'KeyW',d:'KeyS',g:'Space',a:'KeyQ',b:'KeyE',c:'KeyZ',h:'KeyH'},{l:'ArrowLeft',r:'ArrowRight',u:'ArrowUp',d:'ArrowDown',g:'Enter',a:'Comma',b:'Period',c:'Slash',h:'KeyN'}];
+const V=new THREE.Vector3(),V1=new THREE.Vector3(),V2=new THREE.Vector3(),UP=new THREE.Vector3(0,1,0);
+const cv=$('c'),R=new THREE.WebGLRenderer({canvas:cv,antialias:true,powerPreference:'high-performance'});
+R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;R.outputEncoding=THREE.sRGBEncoding;R.toneMapping=THREE.NoToneMapping;
+const pm=new THREE.PMREMGenerator(R),ev=new THREE.Scene();ev.add(new THREE.Mesh(new THREE.BoxGeometry(20,20,20),new THREE.MeshBasicMaterial({color:0x2a3350,side:THREE.BackSide})));
+[[0,9,0,12,.5,12],[9,2,4,.5,6,6],[-9,2,4,.5,6,6],[0,3,9,10,5,.5]].forEach(q=>{const m=new THREE.Mesh(new THREE.BoxGeometry(q[3],q[4],q[5]),new THREE.MeshBasicMaterial({color:new THREE.Color(0xffffff).multiplyScalar(1.3)}));m.position.set(q[0],q[1],q[2]);ev.add(m)});
+const ENV=pm.fromScene(ev,.03).texture;
+const gc=document.createElement('canvas');gc.width=gc.height=256;const gx=gc.getContext('2d'),gr=gx.createRadialGradient(128,128,10,128,128,150);gr.addColorStop(0,'#ffffff');gr.addColorStop(1,'#9aa6c4');gx.fillStyle=gr;gx.fillRect(0,0,256,256);const GT=new THREE.CanvasTexture(gc);GT.encoding=THREE.sRGBEncoding;
+const STG=new THREE.CylinderGeometry(.16,.16,1,24),STM=new THREE.MeshStandardMaterial({color:0xffd34d,roughness:.22,metalness:.7,emissive:0x442a00});
+let AC;function bp(f,d){if(MU)return;d=d||.1;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.frequency.value=f;g.gain.value=.14*VOL;o.connect(g);g.connect(AC.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+d);o.stop(AC.currentTime+d)}catch(e){}}
+function lab(sym,col){const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d');x.fillStyle=col;x.font='bold 84px Arial';x.textAlign='center';x.textBaseline='middle';x.fillText(sym,64,70);const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),depthTest:false,transparent:true}));s.renderOrder=5;return s}
+function mkChar(i){const g=new THREE.Group(),M=(c,r,m)=>new THREE.MeshStandardMaterial({color:c,roughness:r==null?.5:r,metalness:m||0}),S=new THREE.SphereGeometry(1,48,32),C=new THREE.CylinderGeometry(1,1,1,32);
+const ad=(geo,c,x,y,z,sx,sy,sz,par)=>{const m=new THREE.Mesh(geo,M(c));m.position.set(x,y,z);m.scale.set(sx,sy,sz);m.castShadow=true;(par||g).add(m);return m};
+const cap=[0xe41e26,0xff8c1a,0x222222][i],ov=[0x2250d8,0x8a45e0,0x666666][i],sh=[0xf2f2f2,0x19a974,0xffffff][i],sk=0xffc9a0,hr=0x3a2010;
+const lg=[-1,1].map(s=>{const p=new THREE.Group();p.position.set(s*.2,.55,0);g.add(p);ad(C,ov,0,-.25,0,.17,.5,.17,p);ad(S,0x4a2a12,0,-.47,.1,.24,.14,.34,p);return p});
+ad(S,sh,0,.82,0,.5,.45,.4);ad(S,ov,0,.62,.02,.5,.4,.42);
+[-1,1].forEach(s=>{ad(C,ov,s*.25,.95,.3,.07,.3,.05).rotation.x=-.3;ad(S,0xffd23c,s*.25,.82,.42,.07,.07,.04)});
+ad(S,sk,0,1.4,0,.5,.47,.46);
+[-1,1].forEach(s=>{ad(S,sk,s*.5,1.38,0,.09,.13,.08);ad(S,hr,s*.46,1.47,-.05,.08,.15,.2);
+ad(S,0xffffff,s*.17,1.45,.4,.12,.15,.06);ad(S,0x1a1a2a,s*.17,1.45,.45,.06,.09,.04);ad(S,0xffffff,s*.15,1.49,.49,.02,.03,.01);ad(S,hr,s*.17,1.62,.4,.15,.03,.04)});
+ad(S,0xffb08a,0,1.32,.48,.12,.1,.1);ad(S,0x8a2a2a,0,1.17,.44,.1,.035,.04);
+ad(S,cap,0,1.62,-.02,.53,.34,.5);ad(C,cap,0,1.52,.36,.44,.045,.3);
+ad(C,0xffffff,0,1.69,.5,.14,.02,.14).rotation.x=Math.PI/2.4;
+const lb=lab(String(i+1),i?'#e07000':'#d01820');lb.scale.setScalar(.3);lb.position.set(0,1.69,.58);g.add(lb);
+if(!i)[-1,1].forEach(s=>{const m=ad(S,hr,s*.14,1.23,.45,.18,.07,.07);m.rotation.z=s*-.35});
+else[-.17,.17].forEach(x=>{const t=new THREE.Mesh(new THREE.TorusGeometry(.13,.028,10,24),M(0x111111,.3,.5));t.position.set(x,1.45,.43);g.add(t)});
+const arm=s=>{const p=new THREE.Group();p.position.set(s*.54,1,0);g.add(p);ad(C,sh,0,-.22,0,.11,.45,.11,p);p.gl=ad(S,0xffffff,0,-.5,0,.17,.17,.17,p);return p};
+const l=arm(-1),r=arm(1);g.scale.setScalar(.95);return{g,l,r,lg}}
+const ST=new THREE.Scene(),SC=new THREE.PerspectiveCamera(45,1,.1,100);
+ST.environment=ENV;ST.background=new THREE.Color(0x120d2a);ST.add(new THREE.HemisphereLight(0xffffff,0x554466,.4));
+const sl=new THREE.DirectionalLight(0xffffff,.9);sl.position.set(4,9,8);sl.castShadow=true;sl.shadow.mapSize.set(2048,2048);sl.shadow.bias=-.0004;sl.shadow.radius=3;ST.add(sl);
+const pf=new THREE.Mesh(new THREE.BoxGeometry(6,.6,3.4),new THREE.MeshStandardMaterial({color:0xd9a441,roughness:.6}));pf.position.y=-.3;pf.receiveShadow=true;ST.add(pf);
+const bk=new THREE.Mesh(new THREE.PlaneGeometry(40,20),new THREE.MeshStandardMaterial({color:0x3a2a6a}));bk.position.set(0,5,-3);bk.receiveShadow=true;ST.add(bk);
+SC.position.set(0,1.8,9.5);SC.lookAt(0,1.1,0);
+function tag(t,c){const k=document.createElement('canvas');k.width=512;k.height=100;const x=k.getContext('2d');x.fillStyle=c;x.fillRect(0,0,512,100);x.fillStyle='#fff';x.font='bold 54px Tahoma,Arial';x.textAlign='center';x.textBaseline='middle';x.fillText(t,256,54);const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(k),depthTest:false,transparent:true}));s.scale.set(2.4,.47,1);s.renderOrder=9;return s}
+function cs0(wi,d,k){cs={t:0,x:.75,wy:0,vx:0,vy:0,f:0,d:d,k:k,a:[mkChar(wi),mkChar(1-wi)],tg:[tag(G.nm[wi],wi?'#e07000':'#c01820'),tag(G.nm[1-wi],wi?'#c01820':'#e07000')]};cs.a.forEach(c=>ST.add(c.g));cs.tg.forEach(x=>ST.add(x));document.body.classList.add('cs');$('cap').textContent='🏆 فاز '+G.nm[wi]+'!'}
+function cs2(){if(!cs)return;cs.a.forEach(c=>ST.remove(c.g));cs.tg.forEach(x=>ST.remove(x));cs=null;SC.position.x=0;document.body.classList.remove('cs');$('cap').textContent=''}
+const sm1=x=>{x=cl(x,0,1);return x*x*(3-2*x)};
+function cs1(dt){const c=cs,t=c.t+=dt,W=c.a[0],L=c.a[1],imp=3.95,ar=(h,a,b)=>{h.l.rotation.z=-a;h.r.rotation.z=b==null?a:b};
+if(t>imp){c.vx=Math.min(6.5,c.vx+14*dt);c.x+=c.vx*dt;if(c.x>3.1){c.vy+=20*dt;c.wy-=c.vy*dt}}
+const hop=t<imp?Math.max(0,Math.sin(t*5))*.18:0,sw=Math.sin(t*5)*.35;
+W.g.position.set(c.x,c.wy+hop,0);W.g.rotation.y=t<imp?Math.sin(t*1.5)*.25:0;W.g.rotation.z=t>imp?-(t-imp)*(2+c.vx):0;
+if(t<imp)ar(W,2.4+sw,2.4-sw);else ar(W,3.1+Math.sin(t*22)*.35,3.1-Math.sin(t*22)*.35);
+const lx=-.9+1.15*sm1((t-2.6)/1),bo=t>4.5?Math.abs(Math.sin((t-4.5)*8))*.3:0;
+let lr;if(t<3.8)lr=-.6*sm1((t-3.3)/.5);else if(t<4.4)lr=-.6+2.2*sm1((t-3.8)/.2);else lr=1.6*(1-sm1((t-4.4)/.6));
+L.g.position.set(lx,bo,0);L.lg[1].rotation.z=lr;L.lg[0].rotation.z=t>3.3&&t<4.6?-.12:0;
+L.g.rotation.x=t<2.6?.2:.2*(1-sm1((t-2.6)/.6));L.g.rotation.y=t<3.3?Math.sin(t*2)*.4:0;
+L.g.rotation.z=t<3.3?0:t<4.4?-.18*sm1((t-3.3)/.6):-.18*(1-sm1((t-4.4)/.5));
+if(t<2.6)ar(L,.2+Math.sin(t*3)*.05);else if(t<4.5)ar(L,.9);else ar(L,2.5+Math.sin(t*14)*.3,2.5-Math.sin(t*14)*.3);
+SC.position.x=t>imp&&t<4.3?Math.sin(t*90)*.07*(4.3-t)/.35:0;
+c.tg[0].position.set(c.x,c.wy+hop+2.5,.5);c.tg[1].position.set(lx,2.5+bo,.5);
+if(t>imp&&!c.f){c.f=1;$('cap').textContent='😂 ركلة المنافس!';bp(200,.3)}
+if(t>7.2){const d=c.d,k=c.k;cs2();if(k===G.k)d()}}
+function mkW(i){const sc=new THREE.Scene();sc.environment=ENV;sc.background=new THREE.Color(i?0x1b1033:0x0b1e3d);
+sc.add(new THREE.HemisphereLight(0xffffff,0x445577,.4));
+const dl=new THREE.DirectionalLight(0xffffff,.9);dl.position.set(6,9,14);dl.castShadow=true;dl.shadow.mapSize.set(2048,2048);dl.shadow.bias=-.0004;dl.shadow.radius=3;const sh=dl.shadow.camera;sh.left=-14;sh.right=14;sh.top=14;sh.bottom=-14;sh.far=50;sc.add(dl);
+const wall=new THREE.Mesh(new THREE.PlaneGeometry(36,26),new THREE.MeshStandardMaterial({color:i?0x4b3580:0x2a5a9e,roughness:.9,map:GT}));wall.position.z=-3;wall.receiveShadow=true;sc.add(wall);
+const ring=new THREE.Mesh(new THREE.RingGeometry(4.3,4.6,64),new THREE.MeshBasicMaterial({color:i?0xff7bd5:0x4de1ff,transparent:true,opacity:.85}));ring.position.set(0,1,-2.95);sc.add(ring);
+const tray=new THREE.Mesh(new THREE.BoxGeometry(11.5,3,.4),new THREE.MeshStandardMaterial({color:0x0e1730,roughness:.6}));tray.position.set(0,-4.5,-.4);sc.add(tray);
+const build=new THREE.Group();build.position.y=1;sc.add(build);
+const cr=new THREE.Mesh(new THREE.TorusGeometry(.38,.05,8,24),new THREE.MeshBasicMaterial({color:0xffffff,depthTest:false}));cr.renderOrder=9;sc.add(cr);
+const ch=mkChar(i);sc.add(ch.g);return{sc,build,dl,tray,cr,ch,items:[],bonds:[]}}
+const P=[0,1].map(i=>({i,w:mkW(i),cam:new THREE.PerspectiveCamera(50,1,.1,100),cur:{x:0,y:1.5},held:null,pid:null,orb:null,gx:0,gy:0,ox:0,oy:0,jump:0,ga:0,gb:0,pad:0,hw:5,hh:6}));
+let cs=null;const G={mode:'d',on:0,r:0,n:5,T:null,t0:0,k:0,sc:[0,0],wn:[0,0],nm:['',''],pool:[]},key={};let t=0,hu=0;
+function rs(){const W=innerWidth,H=innerHeight,q=QL[qi];R.setPixelRatio(Math.min(devicePixelRatio||1,q[1]));R.setSize(W,H,false);SC.aspect=W/H;SC.updateProjectionMatrix();
+P.forEach(p=>{const a=W/NP()/H,d=Math.max(10.7/a,12);p.cam.aspect=a;p.cam.position.z=d;p.cam.updateProjectionMatrix();p.hh=d*.4663;p.hw=p.hh*a;p.w.tray.scale.x=2*p.hw/11.5;p.w.dl.castShadow=!!q[2]});$('qb').textContent='الجودة: '+q[0]}
+function toSlot(w,it){w.sc.attach(it.m);it.m.position.set(it.slot.x,it.slot.y,0);it.m.scale.set(1,1,1);it.m.rotation.set(0,0,it.k=='s'?Math.PI/2:0);it.inB=false;it.bond=null;it.at=null}
+function rmB(w,it){w.items.filter(x=>x.at===it).forEach(x=>toSlot(w,x));w.bonds.filter(b=>b.a===it||b.b===it).forEach(b=>b.sticks.forEach(s=>toSlot(w,s)));w.bonds=w.bonds.filter(b=>b.a!==it&&b.b!==it)}
+function setup(p,T){const w=p.w;w.items.forEach(it=>it.m.parent&&it.m.parent.remove(it.m));w.items=[];w.bonds=[];w.build.rotation.set(0,0,0);p.held=null;
+const ex=['H','O','C','N'][Math.random()*4|0],sy=T.a.concat(ex).sort(()=>Math.random()-.5),ns=T.b.reduce((s,b)=>s+b[2],0)+1,W=p.hw-.9;
+const sl=(n,y)=>{const sp=Math.min(1.5,2*W/Math.max(1,n-1));return j=>({x:(j-(n-1)/2)*sp,y})},sa=sl(sy.length,-3.8),ss=j=>({x:-W+j*Math.min(1.1,(2*W-3.2)/Math.max(1,ns-1)),y:-5});
+sy.forEach((s,j)=>{const e=EL[s],g=new THREE.Group(),m=new THREE.Mesh(new THREE.SphereGeometry(e[1],64,48),new THREE.MeshPhysicalMaterial({color:e[0],roughness:.28,metalness:.05,clearcoat:1,clearcoatRoughness:.1}));m.castShadow=true;g.add(m);const b=lab(s,e[2]);b.scale.setScalar(e[1]*1.7);g.add(b);w.sc.add(g);const it={m:g,k:'a',sym:s,r:e[1],inB:false,bond:null,slot:sa(j)};w.items.push(it);toSlot(w,it)});
+for(let j=0;j<ns;j++){const m=new THREE.Mesh(STG,STM);m.castShadow=true;w.sc.add(m);const it={m,k:'s',r:.3,inB:false,bond:null,slot:ss(j)};w.items.push(it);toSlot(w,it)}
+const nd=T.a.reduce((q,s,i)=>q+VE[s]-T.b.reduce((u,b)=>u+((b[0]==i||b[1]==i)?b[2]:0),0),0)+2;for(let j=0;j<nd;j++){const m=new THREE.Mesh(new THREE.SphereGeometry(.15,24,16),new THREE.MeshPhysicalMaterial({color:0xffe600,emissive:0xff9900,emissiveIntensity:.6,roughness:.2,clearcoat:1}));m.castShadow=true;m.add(new THREE.Mesh(new THREE.SphereGeometry(.19,24,16),new THREE.MeshBasicMaterial({color:0x111111,side:THREE.BackSide})));w.sc.add(m);const it={m:m,k:'e',r:.15,inB:false,bond:null,at:null,slot:{x:W-.2-(j%8)*.3,y:-4.75-(j>>3)*.32}};w.items.push(it);toSlot(w,it)}}
+function pick(p){const w=p.w;let b=null,bs=0;w.items.forEach(it=>{const q=it.m.getWorldPosition(V),sc=Math.hypot(q.x-p.cur.x,q.y-p.cur.y)-(it.k=='a'?it.r+.6:it.k=='e'?1:.6);if(sc<bs){bs=sc;b=it}});if(!b)return 0;
+if(b.k=='s'&&b.bond){const bo=b.bond;bo.sticks.splice(bo.sticks.indexOf(b),1);if(!bo.sticks.length)w.bonds.splice(w.bonds.indexOf(bo),1);b.bond=null}
+b.at=null;w.sc.attach(b.m);b.m.scale.set(1,1,1);if(b.k=='s')b.m.rotation.set(0,0,Math.PI/2);b.inB=false;p.held=b;bp(520,.06);return 1}
+function segD(q,a,b){const dx=b.x-a.x,dy=b.y-a.y,l=dx*dx+dy*dy||1,u=cl(((q.x-a.x)*dx+(q.y-a.y)*dy)/l,0,1);return Math.hypot(q.x-a.x-u*dx,q.y-a.y-u*dy)}
+function drop(p){const w=p.w,it=p.held;p.held=null;if(!it)return;const q=it.m.getWorldPosition(new THREE.Vector3());
+if(it.k=='e'){let b=null,bd=9;w.items.forEach(a=>{if(a.k=='a'&&a.inB){const d=a.m.getWorldPosition(V).distanceTo(q);if(d<a.r+.8&&d<bd){bd=d;b=a}}});const n=b?w.items.filter(x=>x.at===b).length:9;if(b&&n<8){b.m.attach(it.m);it.at=b;const an=n*Math.PI/4+Math.PI/8,rr=b.r+.3;it.m.position.set(Math.cos(an)*rr,Math.sin(an)*rr,0)}else toSlot(w,it)}else if(it.k=='a'){if(q.y<-2.9){rmB(w,it);toSlot(w,it)}else{w.build.attach(it.m);it.inB=true;{const c=w.items.filter(x=>x.k=='a'&&x.inB&&x.sym==it.sym).length,nd=G.T.a.filter(x=>x==it.sym).length;if(c>nd){p.fb='❌ ذرة '+it.sym+' ليست في الصيغة أو زائدة';p.ft=t+3;if(!it.er&&G.mode!='p')G.er[p.i].push('وضعت ذرة '+it.sym+' لا تتفق مع الصيغة '+FL(G.T.f));it.er=1}}w.items.forEach(o=>{if(o!==it&&o.k=='a'&&o.inB){const dx=it.m.position.x-o.m.position.x,dy=it.m.position.y-o.m.position.y,d=Math.hypot(dx,dy)||.01,m=it.r+o.r+.5;if(d<m){it.m.position.x+=dx/d*(m-d);it.m.position.y+=dy/d*(m-d)}}})}}
+else{let best=null,bd=1;const A=w.items.filter(x=>x.k=='a'&&x.inB);
+for(let i=0;i<A.length;i++)for(let j=i+1;j<A.length;j++){const a=A[i].m.getWorldPosition(new THREE.Vector3()),b=A[j].m.getWorldPosition(new THREE.Vector3()),d=segD(q,a,b);if(d<bd&&a.distanceTo(b)<5){bd=d;best=[A[i],A[j]]}}
+if(best){let bo=w.bonds.find(x=>(x.a===best[0]&&x.b===best[1])||(x.a===best[1]&&x.b===best[0]));if(!bo){bo={a:best[0],b:best[1],sticks:[]};w.bonds.push(bo)}
+if(bo.sticks.length<3){bo.sticks.push(it);it.bond=bo;w.build.attach(it.m)}else toSlot(w,it)}else toSlot(w,it)}
+bp(it.k=='a'?330:440,.08);chk(p)}
+function match(T,at,bd){const n=T.a.length;if(at.length!==n||bd.length!==T.b.length)return 0;const tb={},cb={};T.b.forEach(b=>{tb[b[0]*9+b[1]]=tb[b[1]*9+b[0]]=b[2]});bd.forEach(b=>{cb[b[0]*9+b[1]]=cb[b[1]*9+b[0]]=b[2]});
+const m=[],u=[],r=i=>{if(i==n)return 1;for(let j=0;j<n;j++){if(u[j]||at[j]!==T.a[i])continue;let ok=1;for(let k=0;k<i;k++)if((tb[i*9+k]||0)!==(cb[j*9+m[k]]||0)){ok=0;break}if(ok){u[j]=1;m[i]=j;if(r(i+1))return 1;u[j]=0}}return 0};return r(0)}
+function chk(p){if(!G.on||p.i>=NP())return;const w=p.w,A=w.items.filter(x=>x.k=='a'&&x.inB),at=A.map(x=>x.sym),bd=w.bonds.filter(b=>A.indexOf(b.a)>=0&&A.indexOf(b.b)>=0).map(b=>[A.indexOf(b.a),A.indexOf(b.b),b.sticks.length]);if(match(G.T,at,bd)&&A.every(a=>{const b=w.bonds.reduce((q,o)=>q+((o.a===a||o.b===a)?o.sticks.length:0),0);return w.items.filter(x=>x.at===a).length===VE[a.sym]-b}))end(p.i)}
+function rst(p){const w=p.w;w.bonds=[];p.held=null;w.items.forEach(it=>toSlot(w,it));bp(250,.1)}
+function ub(w){w.build.updateMatrixWorld(true);w.bonds.forEach(b=>{const A=w.build.worldToLocal(b.a.m.getWorldPosition(V1)),B=w.build.worldToLocal(b.b.m.getWorldPosition(V2)),d=B.clone().sub(A),l=d.length()||.01,n=d.clone().normalize(),pp=new THREE.Vector3(-n.y,n.x,0),k=b.sticks.length;
+b.sticks.forEach((s,j)=>{s.m.position.copy(A).addScaledVector(d,.5).addScaledVector(pp,(j-(k-1)/2)*.27);s.m.quaternion.setFromUnitVectors(UP,n);s.m.scale.set(1,l,1)})})}
+const tg=p=>{if(!G.on||p.i>=NP())return;p.held?drop(p):pick(p)};
+function mv(p,e){const vw=innerWidth/NP();p.cur.x=cl(((e.clientX-p.i*vw)/vw*2-1)*p.hw,-p.hw,p.hw);p.cur.y=cl((1-e.clientY/innerHeight*2)*p.hh,-p.hh,p.hh)}
+cv.addEventListener('pointerdown',e=>{if(!G.on)return;e.preventDefault();const p=P[NP()==1||e.clientX<innerWidth/2?0:1];if(p.pid!==null)return;p.pid=e.pointerId;try{cv.setPointerCapture(e.pointerId)}catch(x){}mv(p,e);if(!p.held&&!pick(p))p.orb=[e.clientX,e.clientY]});
+cv.addEventListener('pointermove',e=>{const p=P.find(q=>q.pid===e.pointerId);if(!p)return;if(p.orb){p.w.build.rotation.y+=(e.clientX-p.orb[0])*.01;p.w.build.rotation.x=cl(p.w.build.rotation.x+(e.clientY-p.orb[1])*.01,-1.2,1.2);p.orb=[e.clientX,e.clientY]}else mv(p,e)});
+const up=e=>{const p=P.find(q=>q.pid===e.pointerId);if(!p)return;p.pid=null;p.orb=null;if(p.held)drop(p)};cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);cv.oncontextmenu=e=>e.preventDefault();
+addEventListener('keydown',e=>{if(e.target.tagName=='INPUT')return;key[e.code]=1;if(e.code=='Escape'){menu();return}
+P.forEach((p,i)=>{const k=KM[i];if(!e.repeat){if(e.code==k.g)tg(p);if(e.code==k.c&&G.on)rst(p);if(e.code==k.h)hint(p)}});if(G.on&&/^(Arrow|Space|Enter|Slash|Comma)/.test(e.code))e.preventDefault()});
+addEventListener('keyup',e=>{delete key[e.code]});
+const PM={};
+const GM={};
+function pads(){let g=[];try{g=navigator.getGamepads?navigator.getGamepads():[]}catch(e){}
+P.forEach(p=>{p.pad=0;p.gx=p.gy=p.ox=p.oy=0});const cu={};
+for(let n=0;n<g.length;n++){const q=g[n];if(q&&q.connected&&q.axes.length>=2)cu[q.index]=q}
+Object.keys(GM).forEach(i=>{if(!cu[i])delete GM[i]});
+Object.keys(cu).forEach(i=>{if(GM[i]===undefined){const q=cu[i];if(q.buttons.some(b=>b.pressed)||q.axes.some(a=>Math.abs(a)>.6)){const u=Object.keys(GM).map(x=>GM[x]),f=[0,1].find(x=>u.indexOf(x)<0);if(f!==undefined){GM[i]=f;bp(700,.1)}}}});
+Object.keys(GM).forEach(i=>{const gp=cu[i],p=P[GM[i]],dz=v=>Math.abs(v)<.18?0:v,bt=j=>gp.buttons[j]&&gp.buttons[j].pressed;p.pad=1;
+p.gx=dz(gp.axes[0]||0)+(bt(15)?1:0)-(bt(14)?1:0);p.gy=dz(gp.axes[1]||0)+(bt(13)?1:0)-(bt(12)?1:0);p.ox=dz(gp.axes[2]||0);p.oy=dz((gp.mapping=='standard'?gp.axes[3]:(gp.axes[5]||gp.axes[3]))||0);
+const a=bt(SW?1:0),b=bt(SW?0:1),y=bt(3);nav(p,gp,p.i+1);if(y&&!p.g3)hint(p);p.g3=y;if(a&&!p.ga)tg(p);if(b&&!p.gb&&G.on)rst(p);p.ga=a;p.gb=b})}
+function cd(s){const e=$('cd');e.textContent=s;e.style.opacity=s?1:0}
+const NP=()=>G.mode=='d'?2:1,FL=x=>x.replace(/<[^>]+>/g,'');let MU=ls('mmu')=='1',MS=ls('mms')!='0',VOL=+(ls('mvl')||60)/100,SW=ls('msw')=='1',mus=null;
+const prog=()=>{try{return JSON.parse(ls('mprog')||'{}')}catch(e){return {}}};
+function music(){try{if(MU||!MS){if(mus)mus.g.gain.value=0;return}AC=AC||new(window.AudioContext||window.webkitAudioContext)();
+if(!mus){const g=AC.createGain(),f=AC.createBiquadFilter();f.type='lowpass';f.frequency.value=600;f.connect(g);g.connect(AC.destination);
+[110,164.8,220,277.2].forEach((fr,j)=>{const o=AC.createOscillator(),lf=AC.createOscillator(),lg=AC.createGain(),og=AC.createGain();o.frequency.value=fr*(1+j*.001);lf.frequency.value=.05+j*.03;lg.gain.value=.05;og.gain.value=.08;lf.connect(lg);lg.connect(og.gain);o.connect(og);og.connect(f);o.start();lf.start()});mus={g}}
+mus.g.gain.value=.5*VOL}catch(e){}}
+function rd(w){const V4=new THREE.Vector3();w.items.forEach(a=>{if(a.k!='a'||!a.inB)return;const ds=w.items.filter(x=>x.at===a);if(!ds.length)return;const par=a.m.parent,ang=[];
+w.bonds.forEach(b=>{const o=b.a===a?b.b:b.b===a?b.a:null;if(o){const q=par.worldToLocal(o.m.getWorldPosition(V4));ang.push(Math.atan2(q.y-a.m.position.y,q.x-a.m.position.x))}});
+const sd=[Math.PI/2,0,-Math.PI/2,Math.PI].map((t,j)=>({t,j,s:ang.length?Math.min.apply(null,ang.map(x=>Math.abs(Math.atan2(Math.sin(t-x),Math.cos(t-x))))):9-j*.1})).sort((u,v)=>v.s-u.s||u.j-v.j),rr=a.r+.3;
+ds.forEach((d,n)=>{const t=sd[(n>>1)%4].t,o=(n&1?1:-1)*.16;d.m.position.lerp(V4.set(Math.cos(t)*rr-Math.sin(t)*o,Math.sin(t)*rr+Math.cos(t)*o,0),.35)})})}
+function nav(p,gp,k){if(k!=1)return;const m=!$('menu').classList.contains('hide'),c=!$('msg').classList.contains('hide');if(!m&&!c)return;
+const bt=j=>gp.buttons[j]&&gp.buttons[j].pressed,ax=gp.axes[0]||0,ay=gp.axes[1]||0,d=[bt(12)||ay<-.6,bt(13)||ay>.6,bt(14)||ax<-.6,bt(15)||ax>.6,bt(SW?1:0)],pv=p.nv||[],e=d.map((x,j)=>x&&!pv[j]);p.nv=d;
+const q=m?'#menu ':'#msg ',fl=[].slice.call(document.querySelectorAll(q+'button,'+q+'select,'+q+'input')).filter(x=>x.offsetParent&&x.type!='range'),ix=fl.indexOf(document.activeElement);
+if((e[0]||e[1])&&fl.length)fl[(ix+(e[1]?1:-1)+fl.length)%fl.length].focus();
+const a=document.activeElement;if((e[2]||e[3])&&a&&a.tagName=='SELECT'){a.selectedIndex=cl(a.selectedIndex+(e[3]?1:-1),0,a.options.length-1);a.dispatchEvent(new Event('change'))}
+if(e[4]&&a&&a.tagName=='BUTTON')a.click()}
+function start(){const md=$('md').value;G.mode=md;document.body.classList.toggle('solo',md!='d');
+G.nm=[$('n0').value.trim()||'اللاعب 1',md=='d'?($('n1').value.trim()||'اللاعب 2'):'—'];ls('mn',JSON.stringify(G.nm));G.lim=md=='p'?0:+$('tl').value;const df=+$('df').value;
+G.pool=md=='p'?[COMP[+$('pm').value]]:COMP.filter(c=>df==3||c.a.length<=(df==1?3:5)).sort(()=>Math.random()-.5).slice(0,+$('rn').value).sort((a,b)=>a.a.length-b.a.length);
+G.n=G.pool.length;music();G.r=0;G.sc=[0,0];G.wn=[0,0];G.er=[[],[]];G.hn=[0,0];G.k++;
+P.forEach(p=>{if(p.w.tg)p.w.sc.remove(p.w.tg);p.w.tg=tag(G.nm[p.i],p.i?'#e07000':'#c01820');p.w.sc.add(p.w.tg)});rs();$('menu').classList.add('hide');$('msg').classList.add('hide');nr()}
+function nr(){if(G.r>=G.n)return fin();const k=G.k;G.T=G.pool[G.r++];G.on=0;G.ans=0;P.forEach(p=>{setup(p,G.T);p.pid=null;p.orb=null;p.cur.x=0;p.cur.y=1.5});
+$('fm').innerHTML=G.T.f;$('nm').textContent=G.T.n;$('rd').textContent=G.mode=='p'?'التدريب الحر':'المرحلة '+G.r+' / '+G.n;let c=3;
+const tk=()=>{if(k!==G.k)return;if(c>0){cd(c--);bp(500,.1);setTimeout(tk,800)}else{cd('ابدأ!');bp(800,.25);G.on=1;G.t0=performance.now();setTimeout(()=>cd(''),600)}};tk()}
+function hint(p){if(!G.on||p.i>=NP())return;if(G.mode!='p'){G.hn[p.i]++;G.sc[p.i]=Math.max(0,G.sc[p.i]-20);G.er[p.i].push('استخدمت تلميحًا للمركب '+FL(G.T.f))}
+$('ht').innerHTML='💡 الصيغة البنائية:<pre>'+G.T.s+'</pre><br><small>مجموع إلكترونات التكافؤ: '+G.T.a.reduce((q,x)=>q+VE[x],0)+'</small>';$('ht').classList.remove('hide');clearTimeout(G.ht);G.ht=setTimeout(()=>$('ht').classList.add('hide'),5000);bp(600,.1)}
+function end(i){if(!G.on)return;G.on=0;const s=(performance.now()-G.t0)/1000,k=G.k;let h,pt=0;$('ht').classList.add('hide');
+if(i>=0){pt=G.mode=='p'?0:100+Math.max(0,Math.round(60-s))*2;G.sc[i]+=pt;G.wn[i]++;P[i].jump=3;h='🏆 '+(G.mode=='d'?'فاز '+esc(G.nm[i]):'أحسنت!')+' خلال '+s.toFixed(1)+' ث'+(pt?'<br>+'+pt+' نقطة':'');bp(660,.15);setTimeout(()=>bp(880,.2),150);setTimeout(()=>bp(1100,.3),320);const o=prog();o.s=o.s||{};o.s[FL(G.T.f)]=1;ls('mprog',JSON.stringify(o))}else h='⏱ انتهى الوقت دون حل';
+const sm=()=>card(h,i,k);if(i>=0&&G.mode=='d')cs0(i,sm,k);else sm()}
+function card(h,i,k){const T=G.T,f=FL(T.f),S=SH[f],ps=G.mode!='p'&&i>=0,ve=T.a.reduce((q,x)=>q+VE[x],0),lp=T.a.reduce((q,x,j)=>q+VE[x]-T.b.reduce((u,b)=>u+((b[0]==j||b[1]==j)?b[2]:0),0),0)/2,cl2=Math.random()<.5?lp:lp+1+(Math.random()<.5?1:0),sf=a=>a.slice().sort(()=>Math.random()-.5);
+const Q=[{q:'ما الشكل الجزيئي لـ '+f+'؟',o:sf([S[1]].concat(sf(SL.filter(x=>x!=S[1])).slice(0,3))),a:S[1],p:30,e:'الشكل الإلكتروني: '+S[0]+' • الزاوية: '+S[2]+'<br>'+S[3]},
+{q:'ما مجموع إلكترونات التكافؤ في '+f+'؟',o:sf([ve,ve+2,ve-2,ve+4].filter(x=>x>0)).map(String),a:''+ve,p:15,e:T.a.map(x=>x+'='+VE[x]).join(' + ')+' = '+ve},
+{q:'في صيغة لويس لـ '+f+' يوجد '+cl2+' زوج حر. صحيح أم خطأ؟',o:['صحيح','خطأ'],a:cl2==lp?'صحيح':'خطأ',p:15,e:'الأزواج الحرة = '+lp+' (إلكترونات التكافؤ − إلكترونات الروابط) ÷ 2'}];
+const nx=()=>{if(k!==G.k)return;$('msg').classList.add('hide');if(G.mode=='p')G.r=0;nr()};
+$('mt').innerHTML=h+'<br><b dir="ltr">'+T.f+'</b> — '+T.n+'<br><pre>'+T.s+'</pre><div id="qs"></div>';$('msg').classList.remove('hide');
+const mk=j=>{const q=Q[j];$('qs').innerHTML='<b>'+q.q+'</b><div class="row" style="flex-wrap:wrap">'+q.o.map(x=>'<button data-o="'+x+'">'+x+'</button>').join('')+'</div>';
+$('qs').querySelectorAll('button').forEach(b=>b.onclick=()=>{const ok=b.dataset.o==q.a;if(ok&&ps)G.sc[i]+=q.p;if(!ok&&G.mode!='p')G.er[Math.max(i,0)].push(q.q+' — اخترت «'+b.dataset.o+'» والصحيح «'+q.a+'»');bp(ok?880:200,.2);
+$('qs').innerHTML=(ok?'✅ صحيح'+(ps?' (+'+q.p+')':''):'❌ الصحيح: '+q.a)+'<br><small>'+q.e+'</small><br><button id="nx" style="margin-top:8px;width:100%">'+(j<Q.length-1?'السؤال التالي':G.mode=='p'?'إعادة المحاولة':G.r>=G.n?'النتائج':'المرحلة التالية')+'</button>';$('nx').onclick=()=>j<Q.length-1?mk(j+1):nx();$('nx').focus()})};mk(0)}
+function fin(){G.on=0;const n=NP(),l=jl(),m=[];
+for(let i=0;i<n;i++){const o=l[G.nm[i]]||{s:0,w:0,g:0};o.s+=G.sc[i];o.g++;if(n==2&&G.sc[i]>G.sc[1-i])o.w++;l[G.nm[i]]=o;m[i]=Math.max(0,Math.round(n==1?100*G.wn[i]/G.n:100)-G.er[i].length*5-G.hn[i]*5)}
+ls('mlb',JSON.stringify(l));const wi=n==1?-2:G.sc[0]==G.sc[1]?-1:G.sc[0]>G.sc[1]?0:1;if(wi>=0)P[wi].jump=9;
+$('mt').innerHTML='<h1>'+(wi==-2?'🧪 اكتمل التحدي':wi<0?'🤝 تعادل!':'🏆 الفائز: '+esc(G.nm[wi]))+'</h1>'+[0,1].slice(0,n).map(i=>'<div class="help"><b>'+esc(G.nm[i])+'</b>: '+G.sc[i]+' نقطة • حلّ '+G.wn[i]+' من '+G.n+' • الإتقان <b>'+m[i]+'%</b> '+(m[i]>=85?'(ممتاز)':m[i]>=60?'(جيد)':'(يحتاج مراجعة)')+(G.er[i].length?'<br>الأخطاء العلمية:<br>• '+G.er[i].slice(0,5).map(esc).join('<br>• '):'<br>لا أخطاء علمية ✅')+'</div>').join('')+'<small>الإتقان = نسبة المراحل المحلولة (في الفردي) − خصم 5% لكل خطأ أو تلميح</small><br><br><button id="ag" style="width:100%">القائمة / إعادة اللعب</button>';$('msg').classList.remove('hide');$('ag').onclick=menu}
+function menu(){cs2();G.k++;G.on=0;cd('');$('ht').classList.add('hide');$('msg').classList.add('hide');$('menu').classList.remove('hide');lbr()}
+function lbr(){const l=jl(),a=Object.keys(l).sort((x,y)=>l[y].s-l[x].s).slice(0,6),pg=Object.keys(prog().s||{}).length;$('lb').innerHTML='<h3>📈 التقدم: أتقنت '+pg+' من '+COMP.length+' جزيئًا</h3><div class="bar"><i style="width:'+Math.round(100*pg/COMP.length)+'%"></i></div><h3>🏅 لوحة الأبطال</h3>'+(a.length?'<table><tr><th>#</th><th>الاسم</th><th>النقاط</th><th>فوز/لعب</th></tr>'+a.map((n,i)=>'<tr><td>'+(i+1)+'</td><td>'+esc(n)+'</td><td>'+l[n].s+'</td><td>'+l[n].w+'/'+l[n].g+'</td></tr>').join('')+'</table>':'لا توجد نتائج بعد')}
+let tl=performance.now();
+function loop(now){requestAnimationFrame(loop);const dt=Math.min(.05,(now-tl)/1000);tl=now;t+=dt;pads();
+if(G.on&&G.lim&&(performance.now()-G.t0)>G.lim*1000)end(-1);
+P.forEach(p=>{const k=KM[p.i],w=p.w;
+if(G.on&&p.pid===null){p.cur.x=cl(p.cur.x+((key[k.r]?1:0)-(key[k.l]?1:0)+p.gx)*9*dt,-p.hw,p.hw);p.cur.y=cl(p.cur.y+((key[k.u]?1:0)-(key[k.d]?1:0)-p.gy)*9*dt,-p.hh,p.hh)}
+w.build.rotation.y+=Math.sin(t*.6)*.002;w.build.rotation.y+=(((key[k.b]?1:0)-(key[k.a]?1:0))*1.8+p.ox*2.5)*dt;w.build.rotation.x=cl(w.build.rotation.x+p.oy*2*dt,-1.2,1.2);
+if(p.held){const m=p.held.m.position;const kk=1-Math.exp(-dt*25);m.x+=(p.cur.x-m.x)*kk;m.y+=(p.cur.y-m.y)*kk;m.z=.8}
+ub(w);rd(w);const ch=w.ch,g=ch.g,tx=p.cur.x+(p.cur.x>0?-1.1:1.1),ty=p.cur.y-1.6,ks=1-Math.exp(-dt*7),kh=1-Math.exp(-dt*22);
+if(!p.init){p.bx=tx;p.by=ty;p.ph=0;p.hs=[[p.cur.x,p.cur.y],[p.cur.x,p.cur.y]];p.init=1}
+const sp=Math.hypot(tx-p.bx,ty-p.by)*7,mvs=cl(sp/5,0,1);p.bx+=(tx-p.bx)*ks;p.by+=(ty-p.by)*ks;p.ph+=dt*(6+sp*1.2);
+g.position.set(p.bx,p.by+Math.abs(Math.sin(p.ph))*.07*mvs,1.2);
+g.rotation.y+=(cl((p.cur.x-p.bx)*.12,-.5,.5)-g.rotation.y)*ks;g.rotation.z+=(cl(-(tx-p.bx)*.06,-.25,.25)-g.rotation.z)*ks;
+ch.lg[0].rotation.x=Math.sin(p.ph)*.7*mvs;ch.lg[1].rotation.x=-ch.lg[0].rotation.x;
+[[ch.l,-1,0],[ch.r,1,1]].forEach(q=>{const ar=q[0],sg=q[1],hs=p.hs[q[2]];hs[0]+=(p.cur.x+sg*.22-hs[0])*kh;hs[1]+=(p.cur.y-hs[1])*kh;
+const dx=hs[0]-(g.position.x+sg*.51),dy=hs[1]-(g.position.y+.95),d=Math.hypot(dx,dy);
+if(p.jump>0){ar.rotation.z=sg*2.6;ar.scale.y=1;ar.gl.scale.y=.17}else{ar.rotation.z=Math.atan2(dx,-dy);const sy=cl(d/.48,.5,3.5);ar.scale.y=sy;ar.gl.scale.y=.17/sy}});
+p.jump=Math.max(0,p.jump-dt);if(w.tg)w.tg.position.set(cl(g.position.x,-p.hw+1.3,p.hw-1.3),Math.min(p.hh-.4,g.position.y+2.4),1.6);w.cr.visible=false});
+hu-=dt;if(hu<0&&G.T){hu=.2;P.forEach(p=>{const A=p.w.items.filter(x=>x.k=='a'&&x.inB).length,S=p.w.bonds.reduce((s,b)=>s+b.sticks.length,0),tb=G.T.b.reduce((s,b)=>s+b[2],0),E=p.w.items.filter(x=>x.at).length,ne=G.T.a.reduce((q,s,i)=>q+VE[s]-G.T.b.reduce((u,b)=>u+((b[0]==i||b[1]==i)?b[2]:0),0),0);$('h'+p.i).innerHTML=esc(G.nm[p.i])+' • '+G.sc[p.i]+' نقطة<br><small>ذرات '+A+'/'+G.T.a.length+' • روابط '+S+'/'+tb+' • إلكترونات '+E+'/'+ne+(p.pad?' • 🎮':'')+'</small>'+(p.fb&&t<p.ft?'<br><small style="color:#ff9a9a">'+p.fb+'</small>':'')});$('tm').textContent=G.on?(G.lim?'⏳ '+Math.max(0,G.lim-(performance.now()-G.t0)/1000).toFixed(0)+' ث':((performance.now()-G.t0)/1000).toFixed(1)+' ث'):''}
+const W=innerWidth,H=innerHeight;R.setScissorTest(true);if(cs){cs1(dt);R.setViewport(0,0,W,H);R.setScissor(0,0,W,H);R.render(ST,SC)}else P.slice(0,NP()).forEach(p=>{const x=p.i*W/NP(),w=W/NP();R.setViewport(x,0,w,H);R.setScissor(x,0,w,H);R.render(p.w.sc,p.cam)})}
+$('go').onclick=start;$('mb').onclick=menu;$('qb').onclick=()=>{qi=(qi+1)%3;ls('mq2',qi);rs()};addEventListener('resize',rs);
+try{const n=JSON.parse(ls('mn')||'[]');$('n0').value=n[0]||'';$('n1').value=n[1]||''}catch(e){}
+$('pm').innerHTML=COMP.map((c,i)=>'<option value="'+i+'">'+FL(c.f)+' — '+c.n+'</option>').join('');const mdc=()=>{const m=$('md').value;$('n1').style.display=m=='d'?'':'none';$('pm').style.display=m=='p'?'':'none';$('rn').style.display=$('tl').style.display=m=='p'?'none':''};$('md').onchange=mdc;mdc();
+const tx=()=>{$('ms').textContent='🎵 الموسيقى: '+(MS?'تعمل':'متوقفة');$('sw').textContent='🎮 تبديل ✕/○: '+(SW?'نعم':'لا')};tx();$('vl').value=VOL*100;$('ms').onclick=()=>{MS=!MS;ls('mms',MS?1:0);tx();music()};$('vl').oninput=()=>{VOL=$('vl').value/100;ls('mvl',$('vl').value);music()};$('sw').onclick=()=>{SW=!SW;ls('msw',SW?1:0);tx()};
+$('rp').onclick=()=>{Object.keys(PM).forEach(x=>delete PM[x])};
+$('sp').onclick=()=>{Object.keys(GM).forEach(i=>GM[i]=1-GM[i]);$('sp').textContent='✅ تم التبديل';setTimeout(()=>$('sp').textContent='🔁 تبديل ذراعي اللاعبين',1500)};
+$('hb0').onclick=()=>hint(P[0]);$('hb1').onclick=()=>hint(P[1]);$('sd').textContent='🔊 المؤثرات: '+(MU?'مكتومة':'تعمل');$('sd').onclick=()=>{MU=!MU;ls('mmu',MU?1:0);music();$('sd').textContent='🔊 المؤثرات: '+(MU?'مكتومة':'تعمل')};
+rs();lbr();requestAnimationFrame(loop);
+})();
+</script></body></html>
